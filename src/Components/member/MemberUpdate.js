@@ -43,7 +43,7 @@ function MemberUpdate(props) {
 			username: name,
 		}
 
-		await axios.post("http://localhost:8989/user/update", req, {headers: headers})
+		await axios.post("http://43.201.255.244:8989/user/update", req, {headers: headers})
 			.then((resp) => {
 				console.log("[MemberUpdate.js] update() success :D");
 				console.log(resp.data);

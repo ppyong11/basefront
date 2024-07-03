@@ -32,7 +32,7 @@ function Join() {
 	/* 아이디 중복 체크 */
 	const checkEmailDuplicate = async () => {
 
-		await axios.get("http://localhost:8989/user/checkId", { params: { email: email } })
+		await axios.get("http://43.201.255.244:8989/user/checkId", { params: { email: email } })
 			.then((resp) => {
 				console.log("[Join.js] checkEmailDuplicate() success :D");
 				console.log(resp.data);
@@ -63,7 +63,7 @@ function Join() {
 			username: name,
 		}
 
-		await axios.post("http://localhost:8989/user/register", req)
+		await axios.post("http://43.201.255.244:8989/user/register", req)
 			.then((resp) => {
 				console.log("[Join.js] join() success :D");
 				console.log(resp.data);
