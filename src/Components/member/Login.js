@@ -31,7 +31,7 @@ function Login() {
 			password: pwd
 		}
 
-		await axios.post("http://54.180.131.174:8989/user/login", req)
+		await axios.post("http://3.35.132.149:8989/user/login", req)
 		.then((resp) => {
 			console.log("[Login.js] login() success :D");
 			console.log(resp.data);
@@ -43,10 +43,9 @@ function Login() {
 				localStorage.setItem("id", resp.data.email);
 
 				setAuth(resp.data.email); // 사용자 인증 정보(아이디 저장)
-				setHeaders({"Authorization": `Bearer ${resp.data.toekn}`}); // 헤더 Authorization 필드 저장
+				setHeaders({"Authorization": `Bearer ${resp.data.token}`}); // 헤더 Authorization 필드 저장
 
 				navigate("/bbslist");
-			
 
 		}).catch((err) => {
 			console.log("[Login.js] login() error :<");

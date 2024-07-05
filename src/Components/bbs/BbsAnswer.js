@@ -29,14 +29,14 @@ function BbsAnswer() {
 
 
 	const createBbsAnswer = async () => {
-
+		console.log(parentBbs)
 		const req = {
 			id: localStorage.getItem("id"),
 			title: title,
 			content: content
 		}
 		
-		await axios.post(`http://localhost:3000/bbs/${parentSeq}/answer`, req, {headers: headers})
+		await axios.post(`http://3.35.132.149:8989/board/${parentSeq}/answer`, req, {headers: headers}) //change x
 		.then((resp) => {
 			console.log("[BbsAnswer.js] createBbsAnswer() success :D");
 			console.log(resp.data);
@@ -68,7 +68,7 @@ function BbsAnswer() {
 					<tr>
 						<th className="table-primary">작성자</th>
 						<td>
-							<input type="text" className="form-control" value={parentBbs.id} size="50px" readOnly />
+							<input type="text" className="form-control" value={parentBbs.boardWriter} size="50px" readOnly />
 						</td>
 					</tr>
 

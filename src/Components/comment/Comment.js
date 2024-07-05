@@ -30,7 +30,7 @@ function Comment(props) {
 			content: content
 		};
 
-		await axios.patch(`http://54.180.131.174:8989/board/${boardId}/comment/update/${commentId}`, req, {headers: headers})
+		await axios.patch(`http://3.35.132.149:8989/board/${boardId}/comment/update/${commentId}`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[Comment.js] updateComment() success :D");
 			console.log(resp.data);
@@ -52,7 +52,7 @@ function Comment(props) {
 
 	/* 댓글 삭제 */
 	const deleteComment = async () => {
-		await axios.delete(`http://54.180.131.174:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
+		await axios.delete(`http://3.35.132.149:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
 			.then((resp) => {
 				console.log("[BbsComment.js] deleteComment() success :D");
 				console.log(resp.data);
