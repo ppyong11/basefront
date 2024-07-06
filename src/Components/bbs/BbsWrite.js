@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
 
 import "../../css/bbswrite.css";
+import axiosInstance from "../context/interceptors";
 
 function BbsWrite() {
   const { auth, setAuth } = useContext(AuthContext);
@@ -37,12 +37,16 @@ function BbsWrite() {
   /* 파일 업로드 */
   const fileUpload = async (boardId) => {
 	console.log("업로드할 파일 목록:", files);
+  if (files.length === 0) {
+    console.log("No files to upload");
+    return; // 파일이 없으면 업로드를 생략합니다.
+  }
     // 파일 데이터 저장
     const fd = new FormData();
     files.forEach((file) => fd.append("file", file));
 
-    await axios
-      .post(`http://3.35.132.149:8989/board/${boardId}/file/upload`, fd, { headers: headers })
+    await axiosInstance
+      .post(`http://43.202.1.206:8989/board/${boardId}/file/upload`, fd, { headers: headers })
       .then((resp) => {
         console.log("[file.js] fileUpload() success :D");
         console.log(resp.data);
@@ -62,8 +66,8 @@ function BbsWrite() {
       content: content,
     };
 
-    await axios
-      .post("http://3.35.132.149:8989/board/write", req, { headers: headers })
+    await axiosInstance
+      .post("http://43.202.1.206:8989/board/write", req, { headers: headers })
       .then((resp) => {
         console.log("[BbsWrite.js] createBbs() success :D");
         console.log(resp.data);

@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
 
 import "../../css/bbsupdate.css";
+import axiosInstance from "../context/interceptors";
 
 function BbsUpdate() {
 	const { headers, setHeaders } = useContext(HttpHeadersContext);
@@ -57,7 +58,7 @@ function BbsUpdate() {
 		const fd = new FormData();
 		files.forEach((file) => fd.append(`file`, file));
 
-		await axios.post(`http://3.35.132.149:8989/board/${boardId}/file/upload`, fd, {headers: headers})
+		await axiosInstance.post(`http://43.202.1.206:8989/board/${boardId}/file/upload`, fd, {headers: headers})
 			.then((resp) => {
 				console.log("[file.js] fileUpload() success :D");
 				console.log(resp.data);
@@ -75,7 +76,7 @@ function BbsUpdate() {
 	/* 파일 삭제 */
 	const fileDelete = async (boardId, fileId) => {
 		try {
-			await axios.delete(`http://3.35.132.149:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
+			await axiosInstance.delete(`http://43.202.1.206:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
 				console.log("[BbsUpdate.js] fileDelete() success :D");
 				alert("파일 삭제 성공 :D");
 		} catch (error) {
@@ -93,7 +94,7 @@ function BbsUpdate() {
 			content: content
 		}
 
-		await axios.patch(`http://3.35.132.149:8989/board/${bbs.boardId}/update`, req, {headers: headers})
+		await axiosInstance.patch(`http://43.202.1.206:8989/board/${bbs.boardId}/update`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[BbsUpdate.js] updateBbs() success :D");
 			console.log(resp.data);

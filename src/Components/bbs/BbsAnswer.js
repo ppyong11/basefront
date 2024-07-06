@@ -36,7 +36,7 @@ function BbsAnswer() {
 			content: content
 		}
 		
-		await axios.post(`http://3.35.132.149:8989/board/${parentSeq}/answer`, req, {headers: headers}) //change x
+		await axios.post(`http://43.202.1.206:8989/board/${parentSeq}/answer`, req, {headers: headers}) //change x
 		.then((resp) => {
 			console.log("[BbsAnswer.js] createBbsAnswer() success :D");
 			console.log(resp.data);

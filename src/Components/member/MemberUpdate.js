@@ -4,6 +4,7 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
+import axiosInstance from "../context/interceptors";
 
 function MemberUpdate(props) {
     const { headers, setHeaders } = useContext(HttpHeadersContext);
@@ -43,7 +44,7 @@ function MemberUpdate(props) {
 			username: name,
 		}
 
-		await axios.post("http://3.35.132.149:8989/user/update", req, {headers: headers})
+		await axiosInstance.post("http://43.202.1.206:8989/user/update", req, {headers: headers})
 			.then((resp) => {
 				console.log("[MemberUpdate.js] update() success :D");
 				console.log(resp.data);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
 import "../../css/fileDisplay.css"; // 추가: 스타일 파일 import
+import axiosInstance from "../context/interceptors";
 
 const FileManager = (props) => {
   const { headers, setHeaders } = useContext(HttpHeadersContext);
@@ -13,7 +14,7 @@ const FileManager = (props) => {
   /* 파일 삭제 */
   const fileDelete = async (boardId, fileId) => {
     try {
-      const response = await axios.delete(`http://3.35.132.149:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
+      const response = await axiosInstance.delete(`http://43.202.1.206:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
       console.log("[FielManager.js] fileDelete() success :D");
       console.log(response.data);
 
@@ -42,7 +43,7 @@ const FileManager = (props) => {
             <span>
               <strong>File Name:</strong> {file.originFileName} &nbsp;
               {/* 파일 다운로드 버튼 */}
-              <a href={`http://3.35.132.149:8989/board/${boardId}/file/download?fileId=${file.fileId}`} download>
+              <a href={`http://43.202.1.206:8989/board/${boardId}/file/download?fileId=${file.fileId}`} download>
                 Download
               </a>
             </span>

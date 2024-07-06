@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
+import axiosInstance from "../context/interceptors";
 
 function CommentWrite(props) {
 	const { headers, setHeaders } = useContext(HttpHeadersContext);
@@ -23,7 +24,7 @@ function CommentWrite(props) {
 			content: content,
 		}
 
-		await axios.post(`http://3.35.132.149:8989/board/${boardId}/comment/write`, req, {headers: headers})
+		await axiosInstance.post(`http://43.202.1.206:8989/board/${boardId}/comment/write`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[CommentWrite.js] createComment() success :D");
 			console.log(resp.data);

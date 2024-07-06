@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"
 import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
+import { AxiosContext } from "react-axios/lib/components/AxiosProvider";
+import axiosInstance from "../context/interceptors";
 
 
 /* 댓글 컴포넌트 */
@@ -30,7 +32,7 @@ function Comment(props) {
 			content: content
 		};
 
-		await axios.patch(`http://3.35.132.149:8989/board/${boardId}/comment/update/${commentId}`, req, {headers: headers})
+		await axiosInstance.patch(`http://43.202.1.206:8989/board/${boardId}/comment/update/${commentId}`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[Comment.js] updateComment() success :D");
 			console.log(resp.data);
@@ -52,7 +54,7 @@ function Comment(props) {
 
 	/* 댓글 삭제 */
 	const deleteComment = async () => {
-		await axios.delete(`http://3.35.132.149:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
+		await axiosInstance.delete(`http://43.202.1.206:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
 			.then((resp) => {
 				console.log("[BbsComment.js] deleteComment() success :D");
 				console.log(resp.data);
