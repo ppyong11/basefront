@@ -24,7 +24,7 @@ function CommentWrite(props) {
 			content: content,
 		}
 
-		await axiosInstance.post(`http://43.202.1.206:8989/board/${boardId}/comment/write`, req, {headers: headers})
+		await axiosInstance.post(`http://52.79.43.229:8989/board/${boardId}/comment/write`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[CommentWrite.js] createComment() success :D");
 			console.log(resp.data);

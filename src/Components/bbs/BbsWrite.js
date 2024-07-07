@@ -46,7 +46,7 @@ function BbsWrite() {
     files.forEach((file) => fd.append("file", file));
 
     await axiosInstance
-      .post(`http://43.202.1.206:8989/board/${boardId}/file/upload`, fd, { headers: headers })
+      .post(`http://52.79.43.229:8989/board/${boardId}/file/upload`, fd, { headers: headers })
       .then((resp) => {
         console.log("[file.js] fileUpload() success :D");
         console.log(resp.data);
@@ -67,7 +67,7 @@ function BbsWrite() {
     };
 
     await axiosInstance
-      .post("http://43.202.1.206:8989/board/write", req, { headers: headers })
+      .post("http://52.79.43.229:8989/board/write", req, { headers: headers })
       .then((resp) => {
         console.log("[BbsWrite.js] createBbs() success :D");
         console.log(resp.data);

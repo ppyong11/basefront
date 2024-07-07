@@ -31,7 +31,7 @@ function Login() {
 			password: pwd
 		}
 
-		await axios.post("http://43.202.1.206:8989/user/login", req)
+		await axios.post("http://52.79.43.229:8989/user/login", req)
 		.then((resp) => {
 			console.log("[Login.js] login() success :D");
 			console.log(resp.data);

@@ -38,7 +38,7 @@ function CheckPwd() {
         }
 
         try {
-            const resp = await axiosInstance.post("http://43.202.1.206:8989/user/checkPwd", req, { headers: headers });
+            const resp = await axiosInstance.post("http://52.79.43.229:8989/user/checkPwd", req, { headers: headers });
             console.log("[MemberUpdate.js] checkPwd() success :D");
             console.log(resp.data);
             setEmail(resp.data.email);
