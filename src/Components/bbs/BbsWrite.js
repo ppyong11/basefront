@@ -61,6 +61,16 @@ function BbsWrite() {
 
   /* [POST /bbs]: 게시글 작성 */
   const createBbs = async () => {
+        // 제목과 내용이 비어 있을 경우 작성 못하도록 유효성 검사
+        if (!title.trim()) {
+          alert("제목을 입력해주세요.");
+          return;
+        }
+        if (!content.trim()) {
+          alert("내용을 입력해주세요.");
+          return;
+        }
+        
     const req = {
       title: title,
       content: content,

@@ -111,7 +111,6 @@ function BbsUpdate() {
 			console.log("[BbsUpdate.js] updateBbs() error :<");
 			console.log(err);
 			alert("오류가 발생했습니다. 다시 시도해주세요.");
-			navigate(`/bbslist`); // home 이동
 		});
 
 	}
