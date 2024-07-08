@@ -5,7 +5,6 @@ import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
 
 import "../../css/bbsupdate.css";
-import axiosInstance from "../context/interceptors";
 
 function BbsUpdate() {
 	const { headers, setHeaders } = useContext(HttpHeadersContext);
@@ -58,14 +57,12 @@ function BbsUpdate() {
 		const fd = new FormData();
 		files.forEach((file) => fd.append(`file`, file));
 
-		await axiosInstance.post(`http://52.79.43.229:8989/board/${boardId}/file/upload`, fd, {headers: headers})
+		await axios.post(`http://3.36.53.96:8989/board/${boardId}/file/upload`, fd, {headers: headers})
 			.then((resp) => {
 				console.log("[file.js] fileUpload() success :D");
 				console.log(resp.data);
 				alert("게시물과 파일을 성공적으로 수정했습니다. :D");
 				
-				// 새롭게 등록한 글 상세로 이동
-				navigate(`/bbsdetail/${boardId}`); 
 			})
 			.catch((err) => {
 				console.log("[FileData.js] fileUpload() error :<");
@@ -76,7 +73,7 @@ function BbsUpdate() {
 	/* 파일 삭제 */
 	const fileDelete = async (boardId, fileId) => {
 		try {
-			await axiosInstance.delete(`http://52.79.43.229:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
+			await axios.delete(`http://3.36.53.96:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
 				console.log("[BbsUpdate.js] fileDelete() success :D");
 				alert("파일 삭제 성공 :D");
 		} catch (error) {
@@ -94,7 +91,7 @@ function BbsUpdate() {
 			content: content
 		}
 
-		await axiosInstance.patch(`http://52.79.43.229:8989/board/${bbs.boardId}/update`, req, {headers: headers})
+		await axios.patch(`http://3.36.53.96:8989/board/${bbs.boardId}/update`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[BbsUpdate.js] updateBbs() success :D");
 			console.log(resp.data);
@@ -109,8 +106,26 @@ function BbsUpdate() {
 		})
 		.catch((err) => {
 			console.log("[BbsUpdate.js] updateBbs() error :<");
+			if (err.response)
+				if(err.response.status === 401){
+					//토큰 만료
+					alert("토큰이 만료되었습니다. 다시 로그인하세요.");
+					// 로그아웃 로직 수행
+					localStorage.removeItem("id");
+					localStorage.removeItem('bbs_access_token');
+					// 리다이렉트 수행
+					navigate("/login")
+					window.location.reload();
+				} else if(err.response.status === 403) {
+					        // 403 Forbidden: 접근 권한이 없는 경우
+							alert("비정상적인 접근입니다.");
+							navigate("/bbslist")
+				}else {
+					// 다른 오류 상황에 대한 처리
+					console.error('Error fetching data:', err);
+					alert("오류가 발생했습니다. 다시 시도해주세요.");
+				}
 			console.log(err);
-			alert("오류가 발생했습니다. 다시 시도해주세요.");
 		});
 
 	}

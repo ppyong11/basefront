@@ -3,10 +3,9 @@ import { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
-import axiosInstance from "../context/interceptors";
 
 function CommentWrite(props) {
-	const { headers, setHeaders } = useContext(HttpHeadersContext);
+	const { headers } = useContext(HttpHeadersContext);
 	const { boardId } = useParams(); // 파라미터 가져오기
 
 	const id = localStorage.getItem("id");
@@ -19,22 +18,43 @@ function CommentWrite(props) {
 	}
 
 	const createComment = async() => {
-
+        if (!content.trim()) {
+			alert("내용을 입력해주세요.");
+			return;
+		  }
 		const req = {
 			content: content,
 		}
-
-		await axiosInstance.post(`http://52.79.43.229:8989/board/${boardId}/comment/write`, req, {headers: headers})
+		await axios.post(`http://3.36.53.96:8989/board/${boardId}/comment/write`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[CommentWrite.js] createComment() success :D");
 			console.log(resp.data);
 			alert("댓글을 성공적으로 등록했습니다 :D");
 			navigate(0);
 
-		}).catch((err) => {
-			console.log("[CommentWrite.js] createComment() error :<");
-			console.log(err);
-
+		}).catch((err) =>  {
+            console.log("[CommentWrite.js] createComment() error :<");
+            if (err.response) {
+                if (err.response.status === 401) {
+                    // 토큰 만료
+                    alert("토큰이 만료되었습니다. 다시 로그인하세요.");
+                    // 로그아웃 로직 수행
+                    localStorage.removeItem("id");
+                    localStorage.removeItem('bbs_access_token');
+                    // 리다이렉트 수행
+                    navigate("/login")
+                    window.location.reload();
+                } else if (err.response.status === 403) {
+                    // 403 Forbidden: 접근 권한이 없는 경우
+                    alert("비정상적인 접근입니다.");
+                    navigate("/bbslist")
+                } else {
+                    // 다른 오류 상황에 대한 처리
+                    console.error('Error fetching data:', err);
+                    alert("오류가 발생했습니다. 다시 시도해주세요.");
+				}
+			}
+            console.log(err);
 		});
 	}
 

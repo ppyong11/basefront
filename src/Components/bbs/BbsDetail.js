@@ -19,7 +19,7 @@ function BbsDetail() {
 
   const getBbsDetail = async () => {
     try {
-      const response = await axios.get(`http://52.79.43.229:8989/board/${boardId}`);
+      const response = await axios.get(`http://3.36.53.96:8989/board/${boardId}`);
 
       console.log("[BbsDetail.js] getBbsDetail() success :D");
       console.log(response.data);
@@ -33,7 +33,7 @@ function BbsDetail() {
 
   const deleteBbs = async () => {
     try {
-      const response = await axios.delete(`http://52.79.43.229:8989/board/${boardId}/delete`, {headers: headers});
+      const response = await axios.delete(`http://3.36.53.96:8989/board/${boardId}/delete`, {headers: headers});
 
       console.log("[BbsDetail.js] deleteBbs() success :D");
       console.log(response.data);
@@ -42,9 +42,28 @@ function BbsDetail() {
         alert("게시글을 성공적으로 삭제했습니다 :D");
         navigate("/bbslist");
       }
-    } catch (error) {
+    } catch (err) {
       console.log("[BbsDetail.js] deleteBbs() error :<");
-      console.error(error);
+	  if (err.response)
+		if(err.response.status === 401){
+			//토큰 만료
+			alert("토큰이 만료되었습니다. 다시 로그인하세요.");
+			// 로그아웃 로직 수행
+			localStorage.removeItem("id");
+			localStorage.removeItem('bbs_access_token');
+			// 리다이렉트 수행
+			navigate("/login")
+			window.location.reload();
+		} else if(err.response.status === 403) {
+			// 403 Forbidden: 접근 권한이 없는 경우
+			alert("비정상적인 접근입니다.");
+			navigate("/bbslist")
+		}else {
+			// 다른 오류 상황에 대한 처리
+			console.error('Error fetching data:', err);
+			alert("오류가 발생했습니다. 다시 시도해주세요.");
+		}
+      console.error(err);
     }
   };
 
@@ -77,9 +96,6 @@ function BbsDetail() {
 				<div className="my-3 d-flex justify-content-end">
 					<Link className="btn btn-outline-secondary" to="/bbslist"><i className="fas fa-list">
 						</i> 글목록</Link> &nbsp;
-
-					<Link className="btn btn-outline-secondary" to={{pathname: `/bbsanswer/${bbs.boardId}` }} state={{ parentBbs: parentBbs }}>
-						<i className="fas fa-pen"></i> 답글쓰기</Link> &nbsp;
 
 				{
 					/* 자신이 작성한 게시글인 경우에만 수정, 삭제 가능 */

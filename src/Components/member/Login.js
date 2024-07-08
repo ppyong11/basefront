@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
+import Cookies from "js-cookie";
 
 function Login() {
 
@@ -24,13 +25,12 @@ function Login() {
 	}
 
 	const login = async () => {
-
 		const req = {
 			email: id,
 			password: pwd
 		}
 
-		await axios.post("http://52.79.43.229:8989/user/login", req)
+		await axios.post("http://3.36.53.96:8989/user/login", req)
 		.then((resp) => {
 			console.log("[Login.js] login() success :D");
 			console.log(resp.data);
@@ -42,9 +42,10 @@ function Login() {
 				localStorage.setItem("id", resp.data.email);
 
 				setAuth(resp.data.email); // 사용자 인증 정보(아이디 저장)
-				setHeaders({"Authorization": `Bearer ${resp.data.token}`}); // 헤더 Authorization 필드 저장
+				setHeaders({"Authorization": `Bearer ${resp.data.toekn}`}); // 헤더 Authorization 필드 저장
 
 				navigate("/bbslist");
+			
 
 		}).catch((err) => {
 			console.log("[Login.js] login() error :<");
@@ -53,6 +54,7 @@ function Login() {
 			alert("⚠️ " + err.response.data);
 		});
 	}
+
 
 	return (
 		<div>

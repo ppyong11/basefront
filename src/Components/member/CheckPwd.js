@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
 import MemberUpdate from "./MemberUpdate";
-import axiosInstance from "../context/interceptors";
 
 function CheckPwd() {
     const { headers, setHeaders } = useContext(HttpHeadersContext);
@@ -12,7 +11,8 @@ function CheckPwd() {
     const [name, setName] = useState("");
     const [pwd, setPwd] = useState("");
     const [showMemberUpdate, setShowMemberUpdate] = useState(false);
-
+	const navigate = useNavigate();
+    
     const changeEmail = (event) => {
         setEmail(event.target.value);
     }
@@ -38,7 +38,7 @@ function CheckPwd() {
         }
 
         try {
-            const resp = await axiosInstance.post("http://52.79.43.229:8989/user/checkPwd", req, { headers: headers });
+            const resp = await axios.post("http://3.36.53.96:8989/user/checkPwd", req, { headers: headers });
             console.log("[MemberUpdate.js] checkPwd() success :D");
             console.log(resp.data);
             setEmail(resp.data.email);
@@ -47,7 +47,26 @@ function CheckPwd() {
             setShowMemberUpdate(true);
         } catch (err) {
             console.log("[MemberUpdate.js] checkPwd() error :<");
-            console.log(err);
+            if (err.response)
+				if(err.response.status === 401){
+					//토큰 만료
+					alert("토큰이 만료되었습니다. 다시 로그인하세요.");
+					// 로그아웃 로직 수행
+					localStorage.removeItem("id");
+					localStorage.removeItem('bbs_access_token');
+					// 리다이렉트 수행
+					navigate("/login")
+					window.location.reload();
+				} else if(err.response.status === 403) {
+					        // 403 Forbidden: 접근 권한이 없는 경우
+							alert("비정상적인 접근입니다.");
+							navigate("/bbslist")
+				}else {
+					// 다른 오류 상황에 대한 처리
+					console.error('Error fetching data:', err);
+					alert("오류가 발생했습니다. 다시 시도해주세요.");
+				}
+			console.log(err);
 
             const resp = err.response;
             if (resp.status === 400) {

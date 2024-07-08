@@ -4,14 +4,13 @@ import { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"
 import { AuthContext } from "../context/AuthProvider";
 import { HttpHeadersContext } from "../context/HttpHeadersProvider";
-import { AxiosContext } from "react-axios/lib/components/AxiosProvider";
-import axiosInstance from "../context/interceptors";
-
+import Cookies from 'js-cookie';
 
 /* 댓글 컴포넌트 */
 function Comment(props) {
 	const {auth, setAuth} = useContext(AuthContext);
 	const {headers, setHeaders} = useContext(HttpHeadersContext);
+	const navigate = useNavigate(); // useNavigate 훅 사용하여 navigate 정의
 	
 	const page = props.page;
 	const comment = props.obj;
@@ -27,12 +26,19 @@ function Comment(props) {
 
 	/* 댓글 수정 */
 	const updateComment = async () => {
-
+		const csrfToken = Cookies.get('XSRF-TOKEN'); //read csrf token
 		const req = {
 			content: content
 		};
+		   // Check if the content is empty or unchanged
+		   if (!content || content === comment.content) {
+			alert("변경할 내용이 없습니다.");
+			props.getCommentList(page);
+			return;
+		}
+	
 
-		await axiosInstance.patch(`http://52.79.43.229:8989/board/${boardId}/comment/update/${commentId}`, req, {headers: headers})
+		await axios.patch(`http://192.168.0.130:8989/board/${boardId}/comment/update/${commentId}`, req, {headers: headers})
 		.then((resp) => {
 			console.log("[Comment.js] updateComment() success :D");
 			console.log(resp.data);
@@ -44,27 +50,63 @@ function Comment(props) {
 
 		}).catch((err) => {
 			console.log("[Comment.js] updateComment() error :<");
+			if (err.response)
+				if(err.response.status === 401){
+					//토큰 만료
+					alert("토큰이 만료되었습니다. 다시 로그인하세요.");
+					// 로그아웃 로직 수행
+					localStorage.removeItem("id");
+					localStorage.removeItem('bbs_access_token');
+					// 리다이렉트 수행
+					navigate("/login")
+					window.location.reload();
+				} else if(err.response.status === 403) {
+					// 403 Forbidden: 접근 권한이 없는 경우
+					alert("비정상적인 접근입니다.");
+					navigate("/bbslist")
+				}else {
+					// 다른 오류 상황에 대한 처리
+					console.error('Error fetching data:', err);
+					alert("오류가 발생했습니다. 다시 시도해주세요.");
+				}
 			console.log(err);
-
-			alert(err);
-
 		});
 		updateToggle();
 	}
 
 	/* 댓글 삭제 */
 	const deleteComment = async () => {
-		await axiosInstance.delete(`http://52.79.43.229:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
+		await axios.delete(`http://3.36.53.96:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
 			.then((resp) => {
 				console.log("[BbsComment.js] deleteComment() success :D");
 				console.log(resp.data);
 
-				alert("답글을 성공적으로 삭제했습니다 :D");
+				alert("댓글을 성공적으로 삭제했습니다 :D");
 				//삭제된 댓글 목록 다시 불러오기
+				window.location.reload();
 				props.getCommentList(page);
 
 			}).catch((err) => {
 				console.log("[BbsComment.js] deleteComment() error :<");
+				if (err.response)
+					if(err.response.status === 401){
+						//토큰 만료
+						alert("토큰이 만료되었습니다. 다시 로그인하세요.");
+						// 로그아웃 로직 수행
+						localStorage.removeItem("id");
+						localStorage.removeItem('bbs_access_token');
+						// 리다이렉트 수행
+						navigate("/login")
+						window.location.reload();
+					} else if(err.response.status === 403) {
+						// 403 Forbidden: 접근 권한이 없는 경우
+						alert("비정상적인 접근입니다.");
+						navigate("/bbslist")
+					}else {
+						// 다른 오류 상황에 대한 처리
+						console.error('Error fetching data:', err);
+						alert("오류가 발생했습니다. 다시 시도해주세요.");
+					}
 				console.log(err);
 			});
 	}
