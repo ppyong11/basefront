@@ -20,7 +20,7 @@ const FileDisplay = (props) => {
           <li key={file.fileId} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span>
               {/* 파일 다운로드 버튼 */}
-              [<a href={`http://3.36.53.96:8989/board/${boardId}/file/download?fileId=${file.fileId}`} download>Download</a>] &nbsp;
+              [<a href={`http://43.203.242.155:8989/board/${boardId}/file/download?fileId=${file.fileId}`} download>Download</a>] &nbsp;
               <strong>File Name:</strong> &nbsp;
                 {file.originFileName}
               

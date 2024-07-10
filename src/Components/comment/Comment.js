@@ -76,7 +76,7 @@ function Comment(props) {
 
 	/* 댓글 삭제 */
 	const deleteComment = async () => {
-		await axios.delete(`http://3.36.53.96:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
+		await axios.delete(`http://43.203.242.155:8989/board/${boardId}}/comment/delete/${commentId}`, {headers: headers})
 			.then((resp) => {
 				console.log("[BbsComment.js] deleteComment() success :D");
 				console.log(resp.data);

@@ -11,7 +11,7 @@ function Logout() {
 		const token= localStorage.getItem("bbs_access_token");
 		try {
 			// 토큰이 포함된 헤더로 로그아웃 요청을 보냄
-			await axios.post("http://3.36.53.96:8989/user/logout", {}, {
+			await axios.post("http://43.203.242.155:8989/user/logout", {}, {
 			  headers: {
 				Authorization: `Bearer ${token}`
 			  }

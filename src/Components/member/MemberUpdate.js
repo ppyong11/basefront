@@ -44,7 +44,7 @@ function MemberUpdate(props) {
 			username: name,
 		}
 
-		await axios.patch("http://3.36.53.96:8989/user/update", req, {headers: headers})
+		await axios.patch("http://43.203.242.155:8989/user/update", req, {headers: headers})
 			.then((resp) => {
 				console.log("[MemberUpdate.js] update() success :D");
 				console.log(resp.data);

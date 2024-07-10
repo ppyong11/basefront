@@ -26,7 +26,7 @@ function CommentList(props) {
 	}
 
 	const getCommentList = async (page) => {
-		await axios.get(`http://3.36.53.96:8989/board/${boardId}/comment/list`, { params: {"page": page - 1} })
+		await axios.get(`http://43.203.242.155:8989/board/${boardId}/comment/list`, { params: {"page": page - 1} })
 			.then((resp) => {
 				console.log("[BbsComment.js] getCommentList() success :D");
 				console.log(resp.data);

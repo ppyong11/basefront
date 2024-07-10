@@ -14,7 +14,7 @@ const FileManager = (props) => {
   /* 파일 삭제 */
   const fileDelete = async (boardId, fileId) => {
     try {
-      const response = await axiosInstance.delete(`http://3.36.53.96:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
+      const response = await axiosInstance.delete(`http://43.203.242.155:8989/board/${boardId}/file/delete?fileId=${fileId}`, {headers: headers});
       console.log("[FielManager.js] fileDelete() success :D");
       console.log(response.data);
 
@@ -43,7 +43,7 @@ const FileManager = (props) => {
             <span>
               <strong>File Name:</strong> {file.originFileName} &nbsp;
               {/* 파일 다운로드 버튼 */}
-              <a href={`http://3.36.53.96:8989/board/${boardId}/file/download?fileId=${file.fileId}`} download>
+              <a href={`http://43.203.242.155:8989/board/${boardId}/file/download?fileId=${file.fileId}`} download>
                 Download
               </a>
             </span>
